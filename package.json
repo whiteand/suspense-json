@@ -1,0 +1,25 @@
+{
+  "name": "suspense-json",
+  "version": "0.0.1",
+  "description": "A library for progressive streaming and loading of json",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./client": "./src/client.js",
+    "./server": "./src/server.js"
+  },
+  "scripts": {
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "progressive",
+    "streaming",
+    "json"
+  ],
+  "author": "whiteand <andrewbeletskiy@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "vitest": "^3.2.1"
+  }
+}
