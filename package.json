@@ -6,10 +6,6 @@
   "main": "src/index.js",
   "exports": {
     ".": "./src/index.js",
-    "./client": {
-      "types": "./src/client.js",
-      "import": "./src/client.js"
-    },
     "./encoder": {
       "types": "./src/encoder.d.ts",
       "import": "./src/encoder.js"
