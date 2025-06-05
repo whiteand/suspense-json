@@ -1,5 +1,5 @@
 import { describe, expect } from "vitest";
-import { SuspenseJsonEncoder, SuspenseJsonRootEncoder } from "./encoder";
+import { SuspenseJsonEncoder, SuspenseJsonRootEncoder } from "./encoder.js";
 
 
 async function readAll(stream: ReadableStream) {

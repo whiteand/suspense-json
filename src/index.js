@@ -1,1 +1,1 @@
-export * as encoder from './encoder'
+export * as encoder from './encoder.js'

@@ -1,4 +1,4 @@
-import doNothing from './doNothing'
+import doNothing from './doNothing.js'
 
 function* naturals() {
   for (var i = 0; ; i++) yield i;
