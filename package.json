@@ -6,11 +6,22 @@
   "main": "src/index.js",
   "exports": {
     ".": "./src/index.js",
-    "./client": "./src/client.js",
-    "./server": "./src/server.js"
+    "./client": {
+      "types": "./src/client.js",
+      "import": "./src/client.js"
+    },
+    "./encoder": {
+      "types": "./src/encoder.d.ts",
+      "import": "./src/encoder.js"
+    }
   },
+  "files": [
+    "src/**/*.js",
+    "src/**/*.d.ts"
+  ],
   "scripts": {
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "types": "tsc -p tsconfig.json"
   },
   "keywords": [
     "progressive",
@@ -20,6 +31,7 @@
   "author": "whiteand <andrewbeletskiy@gmail.com>",
   "license": "ISC",
   "devDependencies": {
+    "typescript": "^5.8.3",
     "vitest": "^3.2.1"
   }
 }

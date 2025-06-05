@@ -1,8 +1,10 @@
+import doNothing from './doNothing'
+
 function* naturals() {
   for (var i = 0; ; i++) yield i;
 }
 
-class SuspenseJsonStreamState {
+export class SuspenseJsonStreamState {
   constructor({
     idIterator = naturals(),
     resolved = new Map(),
@@ -15,6 +17,7 @@ class SuspenseJsonStreamState {
      */
     this.toSendPool = [];
     this.idIterator = idIterator;
+
     /**
      * @type {Map<string, string>}
      */
@@ -45,7 +48,7 @@ class SuspenseJsonStreamState {
     this.resolved.clear();
   }
 
-  push(placeholder, data) {
+  resolve(placeholder, data) {
     if (this.resolved.has(placeholder)) {
       throw new Error(`Placeholder ${placeholder} already resolved.`);
     }
@@ -107,12 +110,17 @@ class SuspenseJsonStreamState {
   }
 }
 
-export class SuspenseJsonStream extends ReadableStream {
-  constructor(options) {
-    const state = new SuspenseJsonStreamState(options);
+export class SuspenseJsonEncoder extends ReadableStream {
+  /**
+   * @param {{
+   *   state: SuspenseJsonStreamState,
+   *   start?: (controller: ReadableStreamDefaultController) => void | Promise<void> | undefined,
+   * }} options 
+   */
+  constructor({start = doNothing, state = new SuspenseJsonStreamState() } = {}) {
     super({
       state,
-      start(controller) {},
+      start,
       pull(controller) {
         const { state } = this;
         if (state.isDone()) {
@@ -141,7 +149,17 @@ export class SuspenseJsonStream extends ReadableStream {
    * @param {string} placeholder
    * @param {unknown} data
    */
-  push(placeholder, data) {
-    this.state.push(placeholder, data);
+  resolve(placeholder, data) {
+    this.state.resolve(placeholder, data);
+  }
+}
+
+export class SuspenseJsonRootEncoder extends SuspenseJsonEncoder {
+  constructor(builder, { state = new SuspenseJsonStreamState() } = {}) {
+    super({state, start: async controller => {
+      const value = await builder(state)
+      state._collectNotResolved(value);
+      controller.enqueue(JSON.stringify(value))
+    }})
   }
 }
